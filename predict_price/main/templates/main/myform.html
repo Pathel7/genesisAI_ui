@@ -1,0 +1,990 @@
+{% load static %}
+{% comment %}
+{% load tailwind_tags %}
+{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+    {% comment %}
+    {% tailwind_css %}
+    {% endcomment %}
+    <title>Genesis AI</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="{% static 'css/templatemo-style.css' %}">
+</head>
+<body>
+
+<div class="calculator" id="formEntries">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-heading">
+                    {% if prediction %}
+                    <div class="results">
+                        <h3>En se basant sur vos données,</h3>
+                        <h3>votre maison peut coùter environ : {{ prediction }}$</h3>
+                    </div>
+                    {% endif %}
+                    <h4>Veuillez entrer les caracteristiques de votre maison pour permetttre au modele de predire
+                        son prix</h4>
+                    <h4>pour avoir des meilleurs resultats vous devez remplir tous les champs</h4>
+                </div>
+                <form id="calculate" method="POST" action="{% url 'predict' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="ms_subclass">Type of Housing :</label>
+                                <select class="form-select rounded" id="ms_subclass" name="ms_subclass">
+                                    <option value="20">1-Story 1946 & Newer</option>
+                                    <option value="30">1-Story 1945 & Older</option>
+                                    <option value="40">1-STORY W/FINISHED ATTIC ALL AGES</option>
+                                    <option value="45">1-1/2 STORY - UNFINISHED ALL AGES</option>
+                                    <option value="50">1-1/2 STORY FINISHED ALL AGES</option>
+                                    <option value="60">2-STORY 1946 & NEWER</option>
+                                    <option value="70">2-STORY 1945 & OLDER</option>
+                                    <option value="75">2-1/2 STORY ALL AGES</option>
+                                    <option value="80">SPLIT OR MULTI-LEVEL</option>
+                                    <option value="85">SPLIT FOYER</option>
+                                    <option value="90">DUPLEX - ALL STYLES AND AGES</option>
+                                    <option value="120"> 1-STORY PUD (Planned Unit Development) - 1946 & NEWER
+                                    </option>
+                                    <option value="150">1-1/2 STORY PUD - ALL AGES</option>
+                                    <option value="160">2-STORY PUD - 1946 & NEWER</option>
+                                    <option value="180">PUD - MULTILEVEL - INCL SPLIT LEV/FOYER</option>
+                                    <option value="190"> 2 FAMILY CONVERSION - ALL STYLES AND AGES</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                        <!-- Zone de la maison -->
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="ms_zoning">Zone :</label>
+                                <select class="rounded-xl" id="ms_zoning" name="ms_zoning">
+                                    <option value="A">Agriculture</option>
+                                    <option value="C">Commercial</option>
+                                    <option value="FV">Floating Village Residential</option>
+                                    <option value="I">Industrial</option>
+                                    <option value="RL">Residential Low Density</option>
+                                    <option value="RP">Residential Low Density Park</option>
+                                    <option value="RM">Residential Medium Density</option>
+                                    <option value="RH">Residential High Density</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="LotFrontage"> Linear feet of street connected to property</label>
+                                <input class="rounded" type="number" id="LotFrontage" name="LotFrontage"
+                                       required>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="lot_area"> Lot size in square feet:</label>
+                                <input class="rounded" type="number" id="lot_area" name="lot_area" required>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="street">Street: Type of road access to property:</label>
+                                <select id="street" name="street">
+                                    <option value="Pave">Paved</option>
+                                    <option value="Grvl">Gravel</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="Alley"> Type of alley access to property</label>
+                                <select id="Alley" name="Alley">
+                                    <option value="Pave">Paved</option>
+                                    <option value="Grvl">Gravel</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="lot_shape">Forme du terrain :</label>
+                                <select id="lot_shape" name="lot_shape">
+                                    <option value="Reg">Regular</option>
+                                    <option value="IR2">Moderately Irregular</option>
+                                    <option value="IR1">Slightly irregular</option>
+                                    <option value="IR3">Irregular</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="LandContour">Street: Type of road access to property:</label>
+                                <select id="LandContour" name="LandContour">
+                                    <option value="Lvl">Near Flat/Level</option>
+                                    <option value="Bnk">Banked - Quick and significant rise from street grade to
+                                        building
+                                    </option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="Utilities"> Type of utilities available</label>
+                                <select id="Utilities" name="Utilities">
+                                    <option value="AllPub"> All public Utilities (E,G,W,& S)</option>
+                                    <option value="NoSewr"> Electricity, Gas, and Water (Septic Tank)</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+
+                                <label for="LotConfig">LotConfig</label>
+                                <select id="LotConfig" name="LotConfig">
+                                    <option value="Inside">Inside lot</option>
+                                    <option value="Corner"> Corner lot</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+
+                                <label for="LandSlope">LandSlope: Slope of property</label>
+                                <select id="LandSlope" name="LandSlope">
+                                    <option value="Gtl">Gentle slope</option>
+                                    <option value="Mod"> Moderate Slope</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+
+                                <label for="Neighborhood">Physical locations within Ames city limits</label>
+                                <select id="Neighborhood" name="Neighborhood">
+                                    <option value="Blmngtn"> Bloomington Heights</option>
+                                    <option value="Gilbert"> Gilbert</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+
+                                <label for="Condition1">Proximity to various conditions</label>
+                                <select id="Condition1" name="Condition1">
+                                    <option value="Artery">Adjacent to arterial street</option>
+                                    <option value="Feedr">Adjacent to feeder street</option>
+                                    <option value="Norm">Normal proximity</option>
+                                    <option value="RRNn">Within 200' of North-South Railroad</option>
+                                    <option value="RRAn">Adjacent to North-South Railroad</option>
+                                    <option value="RRAe">Adjacent to East-West Railroad</option>
+                                    <option value="PosN">Near positive off-site feature--park, greenbelt, etc.
+                                    </option>
+                                    <option value="PosA">Adjacent to postive off
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+
+                                <label for="Condition2">Proximity to various conditions (if more than one is
+                                    present)</label>
+                                <select id="Condition2" name="Condition2">
+                                    <option value="Artery">Adjacent to arterial street</option>
+                                    <option value="Feedr">Adjacent to feeder street</option>
+                                    <option value="Norm">Normal proximity</option>
+                                    <option value="RRNn">Within 200' of North-South Railroad</option>
+                                    <option value="RRAn">Adjacent to North-South Railroad</option>
+                                    <option value="RRAe">Adjacent to East-West Railroad</option>
+                                    <option value="PosN">Near positive off-site feature--park, greenbelt, etc.
+                                    </option>
+                                    <option value="PosA">Adjacent to postive off-site feature--park, greenbelt,
+                                        etc.
+                                    </option>
+                                    <option value="RRNe">Within 200' of East-West Railroad</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BldgType">Type of dwelling</label>
+                                <select id="BldgType" name="BldgType">
+                                    <option value="1Fam">Single-family Detached</option>
+                                    <option value="2Fam">Two-family Conversion; originally built as one-family
+                                        dwelling
+                                    </option>
+                                    <option value="Duplex">Duplex</option>
+                                    <option value="Twnhs">Townhouse</option>
+                                    <option value="TwnhsE">Townhouse End Unit</option>
+                                    <option value="2fmCon">Two-family Conversion; built as two-family dwelling with
+                                        a condo association
+                                    </option>
+                                    <option value="Duplex">Duplex - All STYLES AND AGES</option>
+                                    <option value="Twnhs">Townhouse - Inside Unit</option>
+                                    <option value="TwnhsE">Townhouse - End Unit</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="HouseStyle">Style of dwelling</label>
+                                <select id="HouseStyle" name="HouseStyle">
+                                    <option value="1Story">One Story</option>
+                                    <option value="1.5Fin">One and a half Story: 2nd level finished</option>
+                                    <option value="2Story">Two Story</option>
+                                    <option value="2.5Fin">Two and a half Story: 2nd level finished</option>
+                                    <option value="SFoyer">Split Foyer</option>
+                                    <option value="SLvl">Split Level</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="overall_qual">OverallQual: Rates the overall material and finish of the
+                                    house</label>
+                                <select id="overall_qual" name="overall_qual">
+                                    <option value="10">Very Excellent</option>
+                                    <option value="9">Excellente</option>
+                                    <option value="7"> Good</option>
+                                    <option value="6">Above Average</option>
+                                    <option value="5">Average</option>
+                                    <option value="4"> Below Average</option>
+                                    <option value="3">Fair</option>
+                                    <option value="2">Poor</option>
+                                    <option value="1">Very Poor</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="overall_cond">General Condition :</label>
+                                <select id="overall_cond" name="overall_cond">
+                                    <option value="10">Very Excellent</option>
+                                    <option value="9">Excellent</option>
+                                    <option value="8">Very Good</option>
+                                    <option value="7"> Good</option>
+                                    <option value="6">Above Average</option>
+                                    <option value="5">Average</option>
+                                    <option value="4"> Below Average</option>
+                                    <option value="3">Fair</option>
+                                    <option value="2">Poor</option>
+                                    <option value="1">Very Poor</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="year_built">YearBuilt: Original construction date</label>
+                                <input type="number" id="year_built" name="year_built" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="year_remod_add">YearRemodAdd: Remodel date (same as YearBuilt if no
+                                    remodeling or additions)</label>
+                                <input type="number" id="year_remod_add" name="year_remod_add" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="roof_style">RoofStyle</label>
+                                <select id="roof_style" name="roof_style">
+                                    <option value="Flat">Flat</option>
+                                    <option value="Gable">Gable</option>
+                                    <option value="Hip">Hip</option>
+                                    <option value="Gambrel">Gabrel (Barn)</option>
+                                    <option value="Mansard">Mansard</option>
+                                    <option value="Shed">Shed</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="roof_matl">RoofMatl: Roof material</label>
+                                <select id="roof_matl" name="roof_matl">
+                                    <option value="CompShg Standard">Composite Shingle</option>
+                                    <option value="WdShngl">Wood Shingle</option>
+                                    <option value="WdShake">Wood Shake</option>
+                                    <option value="Metal">Metal</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="Exterior1st">Exterior1st</label>
+                                <select id="Exterior1st" name="Exterior1st">
+                                    <option value="BrkFace">Brick Face</option>
+                                    <option value="CBlock">Cinder Block</option>
+                                    <option value="CemntBd">Cement Board</option>
+                                    <option value="HdBoard">Hard Board</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="exterior2nd">Exterior2nd: Exterior covering on house</label>
+                                <select id="exterior2nd" name="exterior2nd">
+                                    <option value="BrkFace">Brick Face</option>
+                                    <option value="CBlock">Cinder Block</option>
+                                    <option value="HdBoard">Hard Board</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="MasVnrType">MasVnrType: Masonry veneer type</label>
+                                <select id="MasVnrType" name="Mas_vnr_type">
+                                    <option value="BrkCmn">Brick Common</option>
+                                    <option value="BrkFace">Brick Face</option>
+                                    <option value="CBlock">Cinder Block</option>
+                                    <option value="None">None</option>
+                                    <option value="Stone">Stone</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="MasVnrArea">MasVnrArea: Masonry veneer area in square feet</label>
+                                <input type="number" id="MasVnrArea" name="Mas_vnr_area">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="exter_qual">ExterQual: Exterior material quality</label>
+                                <select id="exter_qual" name="exter_qual">
+                                    <option value="Ex">Excellent</option>
+                                    <option value="Gd">Good</option>
+                                    <option value="TA">Average/Typical</option>
+                                    <option value="Fa">Fair</option>
+                                    <option value="Po">Poor</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="exter_cond">ExterCond: Present condition of the material on the
+                                    exterior</label>
+                                <select id="exter_cond" name="exter_cond">
+                                    <option value="Ex">Excellent</option>
+                                    <option value="Gd">Good</option>
+                                    <option value="TA">Average/Typical</option>
+                                    <option value="Fa">Fair</option>
+                                    <option value="Po">Poor</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="foundation">Foundation: Type of foundation</label>
+                                <select id="foundation" name="foundation">
+                                    <option value="PConc">Poured Contrete</option>
+                                    <option value="CBlock">Cinder Block</option>
+                                    <option value="BrkTil">Brick and Tile</option>
+                                    <option value="Stone">Stone</option>
+                                    <option value="Wood">Wood</option>
+                                    <option value="Slab">Slab</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtQual">BsmtQual: Evaluates the height of the basement</label>
+                                <select id="BsmtQual" name="BsmtQual">
+                                    <option value="Ex">Excellent</option>
+                                    <option value="Gd">Good</option>
+                                    <option value="TA">Typical</option>
+                                    <option value="Fa">Fair</option>
+                                    <option value="Po">Poor</option>
+                                    <option value="NA">No Basement</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtCond">BsmtCond: Evaluates the general condition of the
+                                    basement</label>
+                                <select id="BsmtCond" name="BsmtCond">
+                                    <option value="Ex">Excellent</option>
+                                    <option value="Gd">Good</option>
+                                    <option value="TA">Typical</option>
+                                    <option value="Fa">Fair</option>
+                                    <option value="Po">Poor</option>
+                                    <option value="NA">No Basement</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtExposure">BsmtExposure: Walkout or garden level basement
+                                    walls</label>
+                                <select id="BsmtExposure" name="BsmtExposure">
+                                    <option value="Gd">Good Exposure</option>
+                                    <option value="Av">Average Exposure</option>
+                                    <option value="Mn">Mimimum Exposure</option>
+                                    <option value="No">No Exposure</option>
+                                    <option value="NA">No Basement</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtFinType1">BsmtFinType1: Rating of basement finished area</label>
+                                <select id="BsmtFinType1" name="BsmtFinType1">
+                                    <option value="GLQ">Good Living Quarters</option>
+                                    <option value="ALQ">Average Living Quarters</option>
+                                    <option value="BLQ">Below Average Living Quarters</option>
+                                    <option value="Rec">Average Rec Room</option>
+                                    <option value="LwQ">Low Quality</option>
+                                    <option value="Unf">Unfinshed</option>
+                                    <option value="NA">No Basement</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtFinSF1">BsmtFinSF1: Type 1 finished square feet</label>
+                                <input type="number" id="BsmtFinSF1" name="BsmtFinSF1" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtFinType2">BsmtFinType2: Rating of basement finished area (if
+                                    multiple types)</label>
+                                <select id="BsmtFinType2" name="BsmtFinType2">
+                                    <option value="GLQ">Good Living Quarters</option>
+                                    <option value="ALQ">Average Living Quarters</option>
+                                    <option value="BLQ">Below Average Living Quarters</option>
+                                    <option value="Rec">Average Rec Room</option>
+                                    <option value="LwQ">Low Quality</option>
+                                    <option value="Unf">Unfinshed</option>
+                                    <option value="NA">No Basement</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtFinSF2">BsmtFinSF2: Type 2 finished square feet</label>
+                                <input type="number" id="BsmtFinSF2" name="BsmtFinSF2" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtUnfSF">Unfinished square feet of basement area</label>
+                                <input type="number" id="BsmtUnfSF" name="BsmtUnfSF" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="TotalBsmtSF">Total square feet of basement area</label>
+                                <input type="number" id="TotalBsmtSF" name="TotalBsmtSF" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="Heating">Type of heating</label>
+                                <select id="Heating" name="Heating">
+                                    <option value="Floor">Floor Furnace</option>
+                                    <option value="GasA">Gas forced warm air furnace</option>
+                                    <option value="GasW">Gas hot water or steam heat</option>
+                                    <option value="Grav">Gravity furnace</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="HeatingQC">HeatingQC: Heating quality and condition</label>
+                                <select id="HeatingQC" name="HeatingQC">
+                                    <option value="Ex">Excellent</option>
+                                    <option value=" Gd">Good</option>
+                                    <option value="TA">Average/Typical</option>
+                                    <option value="Fa">Fair</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="CentralAir">CentralAir: Central air conditioning</label>
+                                <select id="CentralAir" name="CentralAir">
+                                    <option value="N">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="Electrical">Electrical system</label>
+                                <select id="Electrical" name="Electrical">
+                                    <option value="SBrkr">Standard Circuit Breakers & Romex</option>
+                                    <option value="FuseA"> Fuse Box over 60 AMP and all Romex wiring (Average)
+                                    </option>
+                                    <option value="FuseF">F 60 AMP Fuse Box and mostly Romex wiring (Fair)</option>
+                                    <option value="Mix">Mixed</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="1stFlrSF"> First Floor square feet</label>
+                                <input type="number" id="1stFlrSF" name="1stFlrSF" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="2ndFlrSF">2ndFlrSF: Second floor square feet</label>
+                                <input type="number" id="2ndFlrSF" name="2ndFlrSF" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="LowQualFinSF">LowQualFinSF: Low quality finished square feet (all
+                                    floors)</label>
+                                <input type="number" id="LowQualFinSF" name="LowQualFinSF" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="GrLivArea">GrLivArea: Above grade (ground) living area square
+                                    feet</label>
+                                <input type="number" id="GrLivArea" name="GrLivArea" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtFullBath">BsmtFullBath: Basement full bathrooms</label>
+                                <input type="number" id="BsmtFullBath" name="BsmtFullBath" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="BsmtHalfBath">BsmtHalfBath: Basement half bathrooms</label>
+                                <input type="number" id="BsmtHalfBath" name="BsmtHalfBath" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="FullBath">FullBath: Full bathrooms above grade:</label>
+                                <input type="number" id="FullBath" name="FullBath" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="HalfBath">HalfBath: Half baths above grade</label>
+                                <input type="number" id="HalfBath" name="HalfBath" required>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="bedroom">Bedroom: Bedrooms above grade:</label>
+                                <input type="number" id="bedroom" name="bedroom" required class="rounded">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="Kitchen">Kitchen: Kitchens above grade</label>
+                                <input type="number" id="Kitchen" name="Kitchen" required class="rounded">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="kitchen_qual">Kitchen Quality :</label>
+                                <select id="kitchen_qual" name="kitchen_qual">
+                                    <option value="Ex">Excellent</option>
+                                    <option value="Gd">Good</option>
+                                    <option value="TA">Typical/Average</option>
+                                    <option value="Fa">Fair</option>
+                                    <option value="Po">Poor</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="TotRmsAbvGrd">TotRmsAbvGrd: Total rooms above grade (does not include
+                                    bathrooms)</label>
+                                <input type="number" id="TotRmsAbvGrd" name="TotRmsAbvGrd" required class="rounded">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="Functional">Functional: Home functionality (Assume typical unless deductions
+                                    are warranted)</label>
+                                <select id="Functional" name="Functional">
+                                    <option value="Typ">Typical Functionality</option>
+                                    <option value="Min1">Minor Deductions 1</option>
+                                    <option value="Min2">Minor Deductions 2</option>
+                                    <option value="Sev">Severely Damaged</option>
+                                    <option value="Sal">Salvage only</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="Fireplaces">Fireplaces: Number of fireplaces</label>
+                                <input type="number" id="Fireplaces" name="Fireplaces" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="FireplaceQu">FireplaceQu: Fireplace quality</label>
+                                <select id="FireplaceQu" name="FireplaceQu">
+                                    <option value="Ex">Excellent - Exceptional Masonry Fireplace</option>
+                                    <option value="Gd">Good - Masonry Fireplace in main level</option>
+                                    <option value="TA">Average - Prefabricated Fireplace in main living area
+                                        or Masonry Fireplace in
+                                    </option>
+                                    <option value="NA">No Fireplace</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="GarageType">GarageType: Garage location</label>
+                                <select id="GarageType" name="GarageType">
+                                    <option value="Attchd">Attached to home</option>
+                                    <option value="Basment">Basement Garage</option>
+                                    <option value="BuiltIn"> Built-In (Garage part of house - typically has
+                                        room above garage)
+                                    </option>
+                                    <option value="NA">No Garage</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="GarageYrBlt">GarageYrBlt: Year garage was built</label>
+                                <input type="number" id="GarageYrBlt" name="GarageYrBlt" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="GarageFinish">GarageFinish: Interior finish of the
+                                    garage</label>
+                                <select id="GarageFinish" name="GarageFinish">
+                                    <option value="Fin">Finished</option>
+                                    <option value="RFn">Rough Finished</option>
+                                    <option value="Unf">Unfinished</option>
+                                    <option value="NA">No Garage</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="GarageCars">GarageCars: Size of garage in car capacity</label>
+                                <input type="number" id="GarageCars" name="GarageCars" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="GarageArea">GarageArea: Size of garage in square feet</label>
+                                <input type="number" id="GarageArea" name="GarageArea" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="GarageQual">GarageQual: Garage quality</label>
+                                <select id="GarageQual" name="GarageQual">
+                                    <option value="Ex">Excellent - Exceptional Masonry Fireplace</option>
+                                    <option value="Gd">Good - Masonry Fireplace in main level</option>
+                                    <option value="TA">Typical/Average</option>
+                                    <option value="NA">No Garage</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="GarageCond">GarageCond: Garage condition</label>
+                                <select id="GarageCond" name="GarageCond">
+                                    <option value="Ex">Excellent</option>
+                                    <option value="Gd">Good</option>
+                                    <option value="TA">Typical/Average</option>
+                                    <option value="NA">No Garage</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="PavedDrive">PavedDrive: Paved driveway</label>
+                                <select id="PavedDrive" name="PavedDrive">
+                                    <option value="Y">Paved</option>
+                                    <option value="P">Partial Pavement</option>
+                                    <option value="N"> Dirt/Gravel</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="WoodDeckSF">WoodDeckSF: Wood deck area in square feet</label>
+                                <input type="number" id="WoodDeckSF" name="WoodDeckSF" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="OpenPorchSF">OpenPorchSF: Open porch area in square feet</label>
+                                <input type="number" id="OpenPorchSF" name="OpenPorchSF" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="EnclosedPorch">EnclosedPorch: Enclosed porch area in square
+                                    feet</label>
+                                <input type="number" id="EnclosedPorch" name="EnclosedPorch" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="3SsnPorch">3SsnPorch: Three season porch area in square
+                                    feet</label>
+                                <input type="number" id="3SsnPorch" name="3SsnPorch" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="ScreenPorch">ScreenPorch: Screen porch area in square
+                                    feet</label>
+                                <input type="number" id="ScreenPorch" name="ScreenPorch" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="PoolArea">PoolArea: Pool area in square feet</label>
+                                <input type="number" id="PoolArea" name="PoolArea" required class="rounded">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="PoolQC">PoolQC: Pool quality</label>
+                                <select id="PoolQC" name="PoolQC">
+                                    <option value="Ex">Excellent - Exceptional Masonry Fireplace</option>
+                                    <option value="Gd">Good - Masonry Fireplace in main level</option>
+                                    <option value="TA">Typical/Average</option>
+                                    <option value="NA">No Pool</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+
+                                <label for="Fence">Fence: Fence quality</label>
+                                <select id="Fence" name="Fence">
+                                    <option value="GdPrv">Good Privacy</option>
+                                    <option value="MnPrv"> Minimum Privacy</option>
+                                    <option value="GdWo">Good Wood</option>
+                                    <option value="NA">No Fence</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="MiscFeature">MiscFeature: Miscellaneous feature not covered in
+                                    other categories</label>
+                                <select id="MiscFeature" name="MiscFeature">
+                                    <option value="Elev">Elevator</option>
+                                    <option value="Gar2"> 2nd Garage (if not described in garage section)
+                                    </option>
+                                    <option value="Othr">Other</option>
+                                    <option value="NA">None</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="MiscVal">MiscVal: $Value of miscellaneous feature</label>
+                                <input type="number" id="MiscVal" name="MiscVal" required
+                                       class="rounded">
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="MoSold">MoSold: Month Sold (MM)</label>
+                                <input type="number" id="MoSold" name="MoSold" required class="rounded">
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="YrSold">YrSold: Year Sold (YYYY)</label>
+                                <input type="number" id="YrSold" name="YrSold" required class="rounded">
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="SaleType">SaleType: Type of sale</label>
+                                <select id="SaleType" name="SaleType">
+                                    <option value="WD">Warranty Deed - Conventional</option>
+                                    <option value="CWD">Warranty Deed - Cash</option>
+                                    <option value="New">Home just constructed and sold</option>
+                                    <option value="Oth">Other</option>
+                                    <option value="Con">Contract 15% Down payment regular terms</option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="SaleCondition">SaleCondition: Condition of sale</label>
+                                <select id="SaleCondition" name="SaleCondition">
+                                    <option value="Normal">Normal Sale</option>
+                                    <option value="Abnorml">Abnormal Sale - trade, foreclosure, short sale
+                                    </option>
+                                    <option value="AdjLand">Adjoining Land Purchase</option>
+                                    <option value="Family"> Sale between family members</option>
+                                    <option value="Partial"> Home was not completed when last assessed
+                                        (associated with New Homes)
+                                    </option>
+                                </select>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <button type="submit" value="submit" id="form-submit"
+                                        class="orange-button col-lg-12 text-center">
+                                    Predire le prix
+                                </button>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+                <br><br><br>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer id="footer" data-stellar-background-ratio="0.5" class="text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <p class="wow fadeInUp" data-wow-delay="0.6s">Copyright &copy; 2024 All rights reserved.</p>
+
+                machine learning <a rel="nofollow" href="http://www.templatemo.com/page/1"
+                                    target="_parent">genesisAI</a></p>
+
+                <ul class="social-icon">
+                    <li><a href="#" class="fa fa-facebook wow fadeInUp" data-wow-delay="1s"></a></li>
+                    <li><a href="#" class="fa fa-twitter wow fadeInUp" data-wow-delay="1.3s"></a></li>
+                    <li><a href="#" class="fa fa-github wow fadeInUp" data-wow-delay="2s"></a></li>
+                    <li><a href="#" class="fa fa-instagram wow fadeInUp" data-wow-delay="2s"></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+<script src="{% static 'js/wow.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/smoothscroll.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+</body>
+</html>

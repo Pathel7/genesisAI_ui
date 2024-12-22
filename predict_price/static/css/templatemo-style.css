@@ -63,31 +63,7 @@ http://www.templatemo.com/tm-515-eatery
     background-color: #7e023c;
     color: #fff;
   }
-  
-  .section-heading {
-    text-align: center;
-    margin-bottom: 80px;
-  }
-  
-  .section-heading h2 {
-    font-size: 36px;
-    font-weight: 600;
-    color: #1e1e1e;
-  }
-  
-  .section-heading em {
-    font-style: normal;
-    color: #7e023c;
-  }
-  
-  .section-heading span {
-    display: block;
-    margin-top: 15px;
-    text-transform: uppercase;
-    font-size: 15px;
-    color: #666;
-    letter-spacing: 1px;
-  }
+
 
   /*---------------------------------------
      TYPOGRAPHY              
@@ -105,7 +81,7 @@ http://www.templatemo.com/tm-515-eatery
   }
 
   h2 {
-    color: #353535;
+    color: ffffff;
     font-size: 2em;
     padding-bottom: 10px;
   }
@@ -117,7 +93,7 @@ http://www.templatemo.com/tm-515-eatery
 
   h3,
   h3 a {
-    color: #454545;
+    color: ffffff;
   }
 
   p {
@@ -402,12 +378,19 @@ http://www.templatemo.com/tm-515-eatery
     text-align: center;
     margin-bottom: 80px;
   }
+
+  .results {
+  background-color: #7e023c;
+  margin:60px;
+  padding:50px;
+  }
   
   .section-heading h2 {
     font-size: 36px;
     font-weight: 600;
-    color: #1e1e1e;
+    color: ffffff;
   }
+
   
   .section-heading em {
     font-style: normal;
@@ -424,7 +407,7 @@ http://www.templatemo.com/tm-515-eatery
   }
 
   .services {
-	margin-top: 140px;
+	margin-top: 20px;
 }
 
 .service-item img {
@@ -488,6 +471,12 @@ div.calculator .section-heading h4 {
   color: #fff;
 }
 
+
+ h3 {
+  color: #fff;
+}
+
+
 #calculate label {
   color: #fff;
   font-size: 14px;
@@ -516,7 +505,7 @@ div.calculator .section-heading h4 {
   color: #fff;
   background-color: #7e023c;
   padding: 12px 30px;
-  display: inline-block;
+  display: block;
   border-radius: 5px;
   font-weight: 500;
   text-transform: capitalize;
@@ -536,6 +525,7 @@ div.calculator .section-heading h4 {
 
   #home {
     padding: 0;
+    height: 100vh;
   }
 
   #home h1 {
@@ -603,7 +593,7 @@ div.calculator .section-heading h4 {
     background-repeat: no-repeat;
     background-attachment: local;
     background-size: cover;
-    height: 650px;
+    height: 100vh;
   }
 
   .slider .item-first {
